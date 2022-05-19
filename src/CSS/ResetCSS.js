@@ -1,6 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
-const GlobalStyle = createGlobalStyle`
+const ResetCSS = createGlobalStyle`
     /* http://meyerweb.com/eric/tools/css/reset/ 
     v2.0 | 20110126
     License: none (public domain)
@@ -50,4 +50,4 @@ const GlobalStyle = createGlobalStyle`
     border-spacing: 0;
     }`;
 
-export default GlobalStyle;
+export default ResetCSS;

@@ -1,16 +1,20 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import GlobalStyle from "./Components/GlobalStyle";
+import ResetCSS from "./CSS/ResetCSS";
+import GlobalStyles from "./CSS/GlobalStyles";
 import Header from "./Components/Header";
+import MainPage from "./Components/MainPage";
+import Sessions from "./Components/Sessions";
 
 export default function App() {
     return(
         <BrowserRouter>
-            <GlobalStyle />
+            <ResetCSS />
+            <GlobalStyles />
             <Header />
             <Routes>
-                {/* <Route path="/" element={} />
-                <Route path="/sessoes" element={} />
-                <Route path="/assentos" element={} /> */}
+                <Route path="/" element={<MainPage />} />
+                <Route path="/sessoes/:movieId" element={<Sessions />} />
+                {/* <Route path="/assentos" element={} /> */}
             </Routes>
         </BrowserRouter>
     );
