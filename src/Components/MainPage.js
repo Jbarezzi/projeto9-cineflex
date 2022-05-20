@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Movies from "./Movies";
-import Select from "./Select";
+import Select from "./utils/Select";
 
 export default function MainPage() {
     const [movies, setMovies] = useState([]);
