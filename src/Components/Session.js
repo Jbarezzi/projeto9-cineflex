@@ -6,7 +6,7 @@ export default function Session(props) {
         <Container>
             <p>{props.day.weekday} - {props.day.date}</p>
             <Showtimes>
-                {props.day.showtimes.map((showtime, index) => <Link to={`/assentos/${showtime.id}`}><button key={index}>{showtime.name}</button></Link>)}
+                {props.day.showtimes.map((showtime, index) => <Link to={`/assentos/${showtime.id}`} key={index}><button>{showtime.name}</button></Link>)}
             </Showtimes>
         </Container>
     );
