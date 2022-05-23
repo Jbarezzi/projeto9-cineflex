@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Select from "./shared/Select";
 
 export default function Success(props) {
-    console.log(props)
     return(
         <>
             <Select success={true}>
@@ -12,6 +11,10 @@ export default function Success(props) {
                 <strong>Filme e Sessão</strong>
                 {props.movieInfo.movie === undefined ? "" : <p>{props.movieInfo.movie.title}</p>}
                 {props.movieInfo.day === undefined ? "" : <p>{props.movieInfo.day.date}  {props.movieInfo.name}</p>}
+            </Container>
+            <Container>
+                <strong>Ingressos</strong>
+                {props.seatsId === undefined ? "" : props.seatsId.map((seat) => <p>Assento: {seat.toString().slice(2)}</p>)}
             </Container>
             <Container>
                 <strong>Comprador</strong>
