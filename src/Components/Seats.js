@@ -5,21 +5,11 @@ import { useState, useEffect } from "react";
 import ImageContainer from "./shared/ImageContainer";
 import Select from "./shared/Select";
 import Footer from "./shared/Footer";
-import SeatsExample from "./SeatsExample";
-
-
 
 export default function Seats() {
     const { sessionId } = useParams();
     const [seats, setSeats] = useState([]);
     const [movieInfo, setMovieInfo] = useState({});
-    const seatColor = { availableColor: "#C3CFD9", 
-    availableBorderColor: "#7B8B99", 
-    notAvailableColor: "#FBE192", 
-    notAvailableBorderColor: "#F7C52B", 
-    selectedColor: "#8DD7CF", 
-    selectedBorderColor: "#1AAE9E" }
-
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${sessionId}/seats`);
@@ -35,10 +25,10 @@ export default function Seats() {
                 <p>Selecione o(s) assentos</p>
             </Select>
             <List>
-                {seats.map((seat, index) => <RenderSeat seat={seat} key={index} buttonType={seatColor}/>)}
+                {seats.map((seat, index) => <RenderSeat seat={seat} key={index} />)}
             </List>
             <Container>
-                {["Selecionado", "Disponível", "Indisponível"].map((seatType, index) => <SeatsExample key={index} seatType={seatType} buttonType={seatColor} />)}
+                {["Selecionado", "Disponível", "Indisponível"].map((seatType, index) => <SeatsExample key={index} seatType={seatType} />)}
             </Container>
             {/* <Forms>
 
@@ -56,10 +46,35 @@ export default function Seats() {
 function RenderSeat(props) {
     return(
         <li>
-            <SeatButton buttonType={props.buttonType} isAvailable={props.seat.isAvailable}>
-                {props.seat.name}
+            <SeatButton isAvailable={props.seat.isAvailable}>
+                <p>{props.seat.name}</p>
             </SeatButton>
         </li>
+    );
+}
+
+function SeatsExample(props) {
+    if(props.seatType === "Selecionado") {
+        return <SelectedSeat seatType={props.seatType} />
+    } else {
+        return <NormalSeats seatType={props.seatType} />
+    }
+}
+
+function SelectedSeat(props) {
+    return(
+    <ButtonContainer>
+        <SelectedSeatButton></SelectedSeatButton>
+        <p>{props.seatType}</p>
+    </ButtonContainer>);
+}
+
+function NormalSeats(props) {
+    return(
+        <ButtonContainer>
+            <SeatButton seatType={props.seatType}></SeatButton>
+            <p>{props.seatType}</p>
+        </ButtonContainer>
     );
 }
 
@@ -73,8 +88,8 @@ const List = styled.ul`
     `;
 
 const SeatButton = styled.button`
-    background-color: ${props => props.isAvailable ? props.buttonType.availableColor : props.buttonType.notAvailableColor};
-    border: 1px solid ${props => props.isAvailable ? props.buttonType.availableBorderColor : props.buttonType.notAvailableBorderColor };
+    background-color: ${props => props.isAvailable === true ? "#C3CFD9" : "#FBE192"};
+    border: 1px solid ${props => props.isAvailable === true ? "#808F9D" : "#F7C52B"};
     border-radius: 12px;
     width: 26px;
     height: 26px;
@@ -87,4 +102,20 @@ const Container = styled.div`
     align-items: center;
     justify-content: space-around;
     margin-top: 16px;
+    `;
+
+const SelectedSeatButton = styled.button`
+    background-color: #8DD7CF;
+    border: 1px solid #1AAE9E;
+    border-radius: 12px;
+    width: 24px;
+    height: 24px;
+    color: #000000;
+    font-size: 11px;`
+
+const ButtonContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 12px;
     `;

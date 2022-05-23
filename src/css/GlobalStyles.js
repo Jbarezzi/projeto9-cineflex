@@ -6,9 +6,13 @@ const GlobalStyles = createGlobalStyle`
     }
     
     body {
-        font-weight: 400;
-        font-family: "Roboto", sans-serif;
         background-color: #FFFFFF;
-    }`;
+    }
+    
+    p {
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+    }
+    `;
 
 export default GlobalStyles;
