@@ -14,7 +14,7 @@ export default function Success(props) {
             </Container>
             <Container>
                 <strong>Ingressos</strong>
-                {props.seatsId === undefined ? "" : props.seatsId.map((seat) => <p>Assento: {seat.toString().slice(2)}</p>)}
+                {props.seatsId === undefined ? "" : props.seatsId.map((seat, index) => <p key={index}>Assento: {seat.toString().slice(2)}</p>)}
             </Container>
             <Container>
                 <strong>Comprador</strong>
