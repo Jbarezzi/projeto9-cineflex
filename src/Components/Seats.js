@@ -1,6 +1,6 @@
 import axios from "axios";
 import styled from "styled-components";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ImageContainer from "./shared/ImageContainer";
 import Select from "./shared/Select";
@@ -97,16 +97,16 @@ function NormalSeats(props) {
 function Forms(props) {
     const [name, setName] = useState("");
     const [cpf, setCpf] = useState("");
+    const navigate = useNavigate();
 
-    function submitTickets(event) {
-        event.preventDefault();
+    function submitTickets() {
         const APIobject = {
             ids: props.seatsId,
             name: name,
             cpf: cpf
         }
         const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", APIobject);
-        promise.then()
+        promise.then(navigate("/sucesso", { replace: true }));
     }
 
     return(

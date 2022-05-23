@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export default function Select(props) {
     return(
-        <Container>
+        <Container success={props.success}>
             { props.children }
         </Container>
     );
@@ -17,5 +17,6 @@ const Container = styled.div`
 
     p {
         font-size: 24px;
-        color: #293845;
+        color: ${props => props.success ? "#247A6B" : "#293845"} ;
+        font-weight: ${props => props.success ? "700" : "400"};
     }`;
