@@ -17,4 +17,10 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 10px;`;
+    margin-left: 10px;
+    flex-shrink: 0;
+    img {
+        width: 48px;
+        height: 72px;
+    }
+    `;

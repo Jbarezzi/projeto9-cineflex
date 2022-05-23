@@ -17,12 +17,8 @@ const Container = styled.div`
     border: 1px solid #9EADBA;
     display: flex;
     align-items: center;
-    img {
-        width: 48px;
-        height: 72px;
-    }
+    column-gap: 20px;
     p {
         font-size: 26px;
         color: #293845;
-        margin-left: 14px;
     }`;

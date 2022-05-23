@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import ImageContainer from "./shared/ImageContainer";
 import Select from "./shared/Select";
 import Footer from "./shared/Footer";
+import SeatsExample from "./SeatsExample";
 
 
 
@@ -12,9 +13,12 @@ export default function Seats() {
     const { sessionId } = useParams();
     const [seats, setSeats] = useState([]);
     const [movieInfo, setMovieInfo] = useState({});
-    const availableSeat = { color: "#C3CFD9", borderColor: "#7B8B99"};
-    const notAvailableSeat = { color: "#FBE192", borderColor: "#F7C52B"};
-    const selectedSeat = { color: "#8DD7CF", borderColor: "#1AAE9E"};
+    const seatColor = { availableColor: "#C3CFD9", 
+    availableBorderColor: "#7B8B99", 
+    notAvailableColor: "#FBE192", 
+    notAvailableBorderColor: "#F7C52B", 
+    selectedColor: "#8DD7CF", 
+    selectedBorderColor: "#1AAE9E" }
 
 
     useEffect(() => {
@@ -31,27 +35,19 @@ export default function Seats() {
                 <p>Selecione o(s) assentos</p>
             </Select>
             <List>
-                {seats.map((seat, index) => <RenderSeat seat={seat} key={index} buttonType={availableSeat}/>)}
+                {seats.map((seat, index) => <RenderSeat seat={seat} key={index} buttonType={seatColor}/>)}
             </List>
-            <SeatsExample>
-                <Container>
-                    <SeatButton buttonType={selectedSeat} size={"24px"}></SeatButton>
-                    <p>Selecionado</p>
-                </Container>
-                <Container>
-                    <SeatButton buttonType={availableSeat} size={"24px"}></SeatButton>
-                    <p>Disponível</p>
-                </Container>
-                <Container>
-                    <SeatButton buttonType={notAvailableSeat} size={"24px"}></SeatButton>
-                    <p>Indisponível</p>
-                </Container>
-            </SeatsExample>
+            <Container>
+                {["Selecionado", "Disponível", "Indisponível"].map((seatType, index) => <SeatsExample key={index} seatType={seatType} buttonType={seatColor} />)}
+            </Container>
+            {/* <Forms>
+
+            </Forms> */}
             <Footer>
                 <ImageContainer>
-                    <img src={movieInfo.movie.posterURL} alt={`Poster de ${movieInfo.movie.title}`} />
+                    { movieInfo.movie === undefined ? "" : <img src={movieInfo.movie.posterURL} alt={`Poster de ${movieInfo.movie.title}`} />}
                 </ImageContainer>    
-                <p>{movieInfo.movie.title}<br />{movieInfo.day.weekday} - {movieInfo.day.date}</p>
+                    { movieInfo.movie === undefined ? "" : <p>{movieInfo.movie.title}<br />{movieInfo.day.weekday} - {movieInfo.day.date}</p>}  
             </Footer>
         </>
     );
@@ -60,7 +56,7 @@ export default function Seats() {
 function RenderSeat(props) {
     return(
         <li>
-            <SeatButton buttonType={props.buttonType} size={"26px"}>
+            <SeatButton buttonType={props.buttonType} isAvailable={props.seat.isAvailable}>
                 {props.seat.name}
             </SeatButton>
         </li>
@@ -77,25 +73,18 @@ const List = styled.ul`
     `;
 
 const SeatButton = styled.button`
-    background-color: ${props => props.buttonType.color};
-    border: 1px solid ${props => props.buttonType.borderColor};
+    background-color: ${props => props.isAvailable ? props.buttonType.availableColor : props.buttonType.notAvailableColor};
+    border: 1px solid ${props => props.isAvailable ? props.buttonType.availableBorderColor : props.buttonType.notAvailableBorderColor };
     border-radius: 12px;
-    width: ${props => props.size};
-    height: ${props => props.size};
+    width: 26px;
+    height: 26px;
     color: #000000;
     font-size: 11px;
     `;
 
-const SeatsExample = styled.div`
+const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-around;
     margin-top: 16px;
-    `;
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 12px;
     `;
