@@ -10,6 +10,7 @@ export default function Seats() {
     const { sessionId } = useParams();
     const [seats, setSeats] = useState([]);
     const [movieInfo, setMovieInfo] = useState({});
+    const [seatsId, setSeatsId] = useState([]);
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${sessionId}/seats`);
@@ -19,18 +20,33 @@ export default function Seats() {
         })
     }, [sessionId]);
 
+    function selectSeat(idSeat, isAvailable, setClicked, clicked) {
+        seats.map((value, index) => {
+            if(idSeat === index && isAvailable === false) {
+                alert("Esse assento já está ocupado.");
+                console.log(seatsId)
+            } else if (idSeat === index && isAvailable === true) {
+                setClicked(!clicked);
+                setSeatsId([...seatsId, value.id]);
+            } else if (idSeat === index && clicked === true){
+                setClicked(!clicked);
+                setSeatsId(seatsId.filter((id) => id !== value.id));
+            }
+        });
+    }
+
     return(
         <>
             <Select>
                 <p>Selecione o(s) assentos</p>
             </Select>
             <List>
-                {seats.map((seat, index) => <RenderSeat seat={seat} key={index} />)}
+                {seats.map((seat, index) => <RenderSeat seat={seat} key={index} selectSeat={selectSeat} idSeat={index} />)}
             </List>
             <Container>
                 {["Selecionado", "Disponível", "Indisponível"].map((seatType, index) => <SeatsExample key={index} seatType={seatType} />)}
             </Container>
-            <Forms />
+            <Forms seatsId={seatsId} />
             <Footer>
                 <ImageContainer>
                     { movieInfo.movie === undefined ? "" : <img src={movieInfo.movie.posterURL} alt={`Poster de ${movieInfo.movie.title}`} />}
@@ -42,12 +58,12 @@ export default function Seats() {
 }
 
 function RenderSeat(props) {
+    const [clicked, setClicked] = useState(false);
+
     return(
-        <li>
-            <SeatButton isAvailable={props.seat.isAvailable}>
-                <p>{props.seat.name}</p>
-            </SeatButton>
-        </li>
+        <SeatButton isAvailable={props.seat.isAvailable} chosen={clicked} onClick={() => props.selectSeat(props.idSeat ,props.seat.isAvailable, setClicked, clicked)} >
+            <p>{props.seat.name}</p>
+        </SeatButton>
     );
 }
 
@@ -78,31 +94,36 @@ function NormalSeats(props) {
     );
 }
 
-function Forms() {
+function Forms(props) {
     const [name, setName] = useState("");
     const [cpf, setCpf] = useState("");
+
+    function submitTickets(event) {
+        event.preventDefault();
+        const APIobject = {
+            ids: props.seatsId,
+            name: name,
+            cpf: cpf
+        }
+        const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", APIobject);
+        promise.then()
+    }
 
     return(
         <form onSubmit={submitTickets}>
             <FormsContainer>
                 <label htmlFor="name">Nome do Comprador:</label>
-                <input type="text" id="name" valeu={name} required placeholder="Digite seu nome..." onChange={(e) => setName(e.target.value)} />
+                <input type="text" name="name" valeu={name} required placeholder="Digite seu nome..." onChange={(e) => setName(e.target.value)} />
             </FormsContainer>
             <FormsContainer>
                 <label htmlFor="name">CPF do Comprador:</label>
-                <input type="text" id="cpf" valeu={cpf} required placeholder="Digite seu CPF..." onChange={(e) => setCpf(e.target.value)} />
+                <input type="text" name="cpf" valeu={cpf} required placeholder="Digite seu CPF..." onChange={(e) => setCpf(e.target.value)} />
             </FormsContainer>
             <Button>
-                <button type="submit">Reservar assento(s)</button>
+                <button onClick={props.test} type="submit">Reservar assento(s)</button>
             </Button> 
         </form>
     );
-}
-
-function submitTickets(event) {
-    event.preventDefault();
-
-    axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", event)
 }
 
 const List = styled.ul`
@@ -115,8 +136,8 @@ const List = styled.ul`
     `;
 
 const SeatButton = styled.button`
-    background-color: ${props => props.isAvailable === true ? "#C3CFD9" : "#FBE192"};
-    border: 1px solid ${props => props.isAvailable === true ? "#808F9D" : "#F7C52B"};
+    background-color: ${props => props.chosen ? '#8DD7CF' : props.isAvailable ? '#C3CFD9' :'#FBE192'};
+    border: 1px solid ${props => props.chosen ? '#45BDB0' : props.isAvailable ? '#808F9D' :'#F7C52B'};
     border-radius: 12px;
     width: 26px;
     height: 26px;
